@@ -1,0 +1,21 @@
+[
+  {"source": "Locke", "target": "Terra", "type": "A"},
+  {"source": "Locke", "target": "Celes", "type": "A"},
+  {"source": "Cyan", "target": "Terra", "type": "A"},
+  {"source": "Celes", "target": "Locke", "type": "A"},
+  {"source": "Celes", "target": "Edgar", "type": "A"},
+  {"source": "Terra", "target": "Locke", "type": "A"},
+  {"source": "Strago", "target": "Relm", "type": "A"},
+  {"source": "Relm", "target": "Strago", "type": "A"},
+  {"source": "Shadow", "target": "Relm", "type": "A"},
+  {"source": "Shadow", "target": "Sabin", "type": "A"},
+  {"source": "Gau", "target": "Shadow", "type": "A"},
+  {"source": "Setzer", "target": "Celes", "type": "A"},
+  {"source": "Edgar", "target": "Sabin", "type": "A"},
+  {"source": "Edgar", "target": "Locke", "type": "A"},
+  {"source": "Sabin", "target": "Edgar", "type": "A"},
+  {"source": "Kefka", "target": "Edgar", "type": "E"},
+  {"source": "Kefka", "target": "Locke", "type": "E"},
+  {"source": "Kefka", "target": "Terra", "type": "E"},
+  {"source": "Kefka", "target": "Celes", "type": "E"}
+]
