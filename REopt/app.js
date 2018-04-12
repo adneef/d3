@@ -1,10 +1,9 @@
-
 // create initial svg
 const svg = d3
 .select('body')
 .append('svg')
-.attr('width', 960)
-.attr('height', 500)
+.attr('width', '960')
+.attr('height', '500')
 
 // set svg attributes
 const margin = {top: 20, right: 20, bottom: 50, left: 150},
@@ -14,7 +13,6 @@ height = svg.attr('height') - margin.top - margin.bottom
 // create defs for our svg styling gradients
 const defs = svg
 .append('defs')
-
 
 // create a linearGradient for the chart's bars
 const sunbeam = defs
@@ -44,7 +42,7 @@ corona
 
 corona
 .append('stop')
-.attr('offset', '95%')
+.attr('offset', '99%')
 .attr('stop-color', 'white')
 
 const core = defs
@@ -83,6 +81,10 @@ const solarViz = async () => {
   const result = await d3.json('./PVWattsData.json')
 
   // pull out of the data the stuff we want
+  let city = result.station_info.city,
+  state = result.station_info.state
+  city = city[0] + city.slice(1).toLowerCase()
+  const location = `${city}, ${state}`
   let solRadMonthlyArr = result.outputs.solrad_monthly
   solRadMonthlyArr.push(result.outputs.solrad_annual)
 
@@ -109,16 +111,16 @@ const solarViz = async () => {
   g
   .append('text')
   .attr('class', 'label')
-  .attr('dy', '0.71em')
-  .attr('y', height + 20)
+  .attr('y', height + margin.bottom/1.3)
   .attr('x', width/2)
-  .attr('text-anchor', 'end')
+  .attr('text-anchor', 'middle')
   .text('kWh/m2/day')
 
   // label the y-axis
   g
   .append('g')
   .attr('class', 'axis axis--y')
+  .style('font', '14px')
   .call(d3.axisLeft(y))
 
   // title the y-axis
@@ -126,7 +128,7 @@ const solarViz = async () => {
   .append('text')
   .attr('class', 'label')
   .attr('transform', 'rotate(-90)')
-  .attr('y', -Number(margin.left)/5)
+  .attr('y', -Number(margin.left)/3.75)
   .attr('x', -height/2)
   .attr('text-anchor', 'middle')
   .text('Month')
@@ -154,9 +156,7 @@ const solarViz = async () => {
   .attr('y', d => y(d.month))
   .attr('dy', '1.2em')
   .attr('dx', '-2.5em')
-  .text(d => Number(d.solRad).toFixed(3))
-
-  console.log(bar.attr('height'))
+  .text(d => +d.solRad.toFixed(3))
 
   // add a sun to the left side of our svg, inner and outer components
   const corona = svg
@@ -165,8 +165,8 @@ const solarViz = async () => {
   .attr('class', 'corona')
   .attr('cx', 0)
   .attr('cy', y('Aug'))
-  .attr('ry', d => y(d.month)/2)
-  .attr('rx', Number(margin.left) * 0.7)
+  .attr('ry', d => y(d.month)/3)
+  .attr('rx', +margin.left * 0.6)
 
   const core = svg
   .append('ellipse')
@@ -176,6 +176,16 @@ const solarViz = async () => {
   .attr('cy', y('Aug'))
   .attr('ry', +corona.attr('ry')/3)
   .attr('rx', +corona.attr('rx')/3)
+
+  // append title to our svg based on size of chart
+  svg
+  .append('text')
+  .data(data)
+  .attr('x', d => x(d.solRad))
+  .attr('y', margin.top)
+  .attr('class', 'chartTitle')
+  .attr('text-anchor', 'middle')
+  .text(`Monthly and Annual Solar Radiation Values Near ${location}`)
 
 }
 

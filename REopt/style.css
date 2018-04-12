@@ -1,5 +1,5 @@
 svg {
-  background-color: rgb(0, 153, 251)
+  background: linear-gradient(to right, white, rgb(0, 153, 251) 15%)
 }
 
 .corona {
@@ -16,10 +16,15 @@ svg {
   transition: fill 2s ease-in-out;
 }
 
-/* .bar:hover{
-  fill: white;
-} */
+.label {
+  font-size: 16px;
+}
 
-.barLabel {
-  color: black;
+.axis {
+  font-size: 14px;
+}
+
+.chartTitle {
+  font-size: 20px;
+  text-decoration: underline;
 }
