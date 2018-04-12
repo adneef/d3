@@ -1,11 +1,24 @@
-.bar {
-  fill: rgb(255, 230, 0);
-  stroke: white;
-}
-
 svg {
   background-color: rgb(0, 153, 251)
 }
+
+.corona {
+  fill: url('#corona')
+}
+
+.core {
+  fill: url('#core')
+}
+
+.bar {
+  fill: url("#sunbeam");
+  stroke: white;
+  transition: fill 2s ease-in-out;
+}
+
+/* .bar:hover{
+  fill: white;
+} */
 
 .barLabel {
   color: black;

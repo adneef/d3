@@ -1,5 +1,6 @@
 .bar {
   fill: steelblue;
+  transition: fill .5s ease-in-out;
 }
 
 .bar:hover {
