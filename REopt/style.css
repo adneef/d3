@@ -1,0 +1,12 @@
+.bar {
+  fill: rgb(255, 230, 0);
+  stroke: white;
+}
+
+svg {
+  background-color: rgb(0, 153, 251)
+}
+
+.barLabel {
+  color: black;
+}
