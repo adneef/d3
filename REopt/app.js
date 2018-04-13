@@ -1,14 +1,14 @@
 // create initial svg
 const svg = d3
-.select('body')
-.append('svg')
-.attr('width', '960')
-.attr('height', '500')
+.select('svg')
 
 // set svg attributes
 const margin = {top: 20, right: 20, bottom: 50, left: 150},
-width = svg.attr('width') - margin.right - margin.left,
-height = svg.attr('height') - margin.top - margin.bottom
+x = d3.scaleLinear(),
+y = d3.scaleBand().padding(0.1)
+
+let theData
+let where
 
 // create defs for our svg styling gradients
 const defs = svg
@@ -26,7 +26,6 @@ sunbeam
 
 sunbeam
 .append('stop')
-.attr('id', 'beamEnd')
 .attr('offset', '95%')
 .attr('stop-color', 'rgb(255, 230, 0)')
 
@@ -67,15 +66,27 @@ const g = svg
 // create a months array, corresponding to the data we expect to receive
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec', 'Annual']
 
-// create the function that will make our barchart (es6)
-const solarViz = async () => {
+  g
+  .append('g')
+  .attr('class', 'axis axis--x')
 
-  const x = d3.scaleLinear()
-  .range([0, width])
+  g
+  .append('text')
+  .attr('class', 'label x-title')
 
-  const y = d3.scaleBand()
-  .rangeRound([height, 0])
-  .padding(0.1)
+  g
+  .append('g')
+  .attr('class', 'axis axis--y')
+
+  g
+  .append('text')
+  .attr('class', 'y-title label')
+
+  svg
+  .append('text')
+  .attr('class', 'chartTitle')
+
+const getData = async () => {
 
   // get our data
   const result = await d3.json('./PVWattsData.json')
@@ -83,8 +94,10 @@ const solarViz = async () => {
   // pull out of the data the stuff we want
   let city = result.station_info.city,
   state = result.station_info.state
+
   city = city[0] + city.slice(1).toLowerCase()
-  const location = `${city}, ${state}`
+
+  where = `${city}, ${state}`
   let solRadMonthlyArr = result.outputs.solrad_monthly
   solRadMonthlyArr.push(result.outputs.solrad_annual)
 
@@ -96,21 +109,36 @@ const solarViz = async () => {
     data.unshift({month: months[i], solRad: solRadMonthlyArr[i]})
   }
 
+  theData = data
+
   // set the x and y domains based on our returned data
   x.domain([d3.min(data, d => d.solRad) - 0.2, d3.max(data, d => d.solRad) + 0.2])
   y.domain(data.map(d => d.month))
 
+  makeChart()
+}
+
+// create the function that will make our barchart (es6)
+const makeChart = () => {
+
+  const bounds = svg.node().getBoundingClientRect(),
+  width = bounds.width - margin.right - margin.left,
+  height = bounds.height - margin.top - margin.bottom
+
+  console.log(bounds)
+
+  x.range([0, width])
+  y.rangeRound([height, 0])
+
   // label the x-axis
   g
-  .append('g')
-  .attr('class', 'axis axis--x')
+  .select('.axis--x')
   .attr('transform', `translate(0, ${height})`)
   .call(d3.axisBottom(x))
 
   // title the x-axis
   g
-  .append('text')
-  .attr('class', 'label')
+  .select('.x-title')
   .attr('y', height + margin.bottom/1.3)
   .attr('x', width/2)
   .attr('text-anchor', 'middle')
@@ -118,15 +146,12 @@ const solarViz = async () => {
 
   // label the y-axis
   g
-  .append('g')
-  .attr('class', 'axis axis--y')
-  .style('font', '14px')
+  .select('.axis--y')
   .call(d3.axisLeft(y))
 
   // title the y-axis
   g
-  .append('text')
-  .attr('class', 'label')
+  .select('.y-title')
   .attr('transform', 'rotate(-90)')
   .attr('y', -Number(margin.left)/3.75)
   .attr('x', -height/2)
@@ -134,9 +159,13 @@ const solarViz = async () => {
   .text('Month')
 
   // create the bars for our chart dynamically based on how much data there is
-  const bar = g
+  const bars = g
   .selectAll('.bar')
-  .data(data)
+  .data(theData)
+
+  bars.exit().remove()
+
+  bars
   .enter()
   .append('rect')
   .attr('class', 'bar')
@@ -145,10 +174,20 @@ const solarViz = async () => {
   .attr('width', d => x(d.solRad))
   .attr('height', y.bandwidth())
 
+  bars
+  .attr('x', 2)
+  .attr('y', d => y(d.month))
+  .attr('width', d => x(d.solRad))
+  .attr('height', y.bandwidth())
+
   // label the bars with their values for better precision
-  g
+  const barLabels = g
   .selectAll('.barLabel')
-  .data(data)
+  .data(theData)
+
+  barLabels.exit().remove()
+
+  barLabels
   .enter()
   .append('text')
   .attr('class', 'barLabel')
@@ -158,10 +197,17 @@ const solarViz = async () => {
   .attr('dx', '-2.5em')
   .text(d => +d.solRad.toFixed(3))
 
+  barLabels
+  .attr('x', d => x(d.solRad))
+  .attr('y', d => y(d.month))
+  .attr('dy', '1.2em')
+  .attr('dx', '-2.5em')
+  .text(d => +d.solRad.toFixed(3))
+
   // add a sun to the left side of our svg, inner and outer components
   const corona = svg
   .append('ellipse')
-  .data(data)
+  .data(theData)
   .attr('class', 'corona')
   .attr('cx', 0)
   .attr('cy', y('Aug'))
@@ -170,7 +216,7 @@ const solarViz = async () => {
 
   const core = svg
   .append('ellipse')
-  .data(data)
+  .data(theData)
   .attr('class', 'core')
   .attr('cx', 0)
   .attr('cy', y('Aug'))
@@ -179,15 +225,18 @@ const solarViz = async () => {
 
   // append title to our svg based on size of chart
   svg
-  .append('text')
-  .data(data)
+  .select('.chartTitle')
+  .data(theData)
   .attr('x', d => x(d.solRad))
   .attr('y', margin.top)
-  .attr('class', 'chartTitle')
   .attr('text-anchor', 'middle')
-  .text(`Monthly and Annual Solar Radiation Values Near ${location}`)
-
+  .text(`Monthly and Annual Solar Radiation Values Near ${where}`)
 }
 
 // call the function to create our chart
-solarViz()
+const assemble = async () => {
+  if(!theData) await getData()
+  d3.select(window).on('resize', makeChart)
+}
+
+assemble()

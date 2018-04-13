@@ -1,5 +1,6 @@
 svg {
-  background: linear-gradient(to right, white, rgb(0, 153, 251) 15%)
+  background: linear-gradient(to right, white, rgb(0, 153, 251) 15%);
+  position: absolute;
 }
 
 .corona {
@@ -25,6 +26,6 @@ svg {
 }
 
 .chartTitle {
-  font-size: 20px;
+  font-size: 1.2em;
   text-decoration: underline;
 }
