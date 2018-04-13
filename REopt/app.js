@@ -199,10 +199,20 @@ const makeChart = () => {
   .duration(750)
   .attr('x', d => x(d.solRad))
 
-  const currentX = () => console.log(d3.selectAll('.barLabel')._groups[0][0].attributes[4])
-  window.setTimeout(currentX, 751)
-  // let currentX = d3.selectAll('.barLabel')._groups[0][0].attributes[4]
-  // console.log(currentX)
+  let currentX
+
+  const nodeList = Object.values(d3.selectAll('.barLabel')._groups[0][0].attr)
+
+  console.log(nodeList.map((el, idx)=> {
+    return {idx: idx, x: nodeList[idx].attributes[4]}
+  }))
+  const getXValues = () => 1
+
+  const outsideLabelsIfNeeded = async () => {
+    await window.setTimeout(currentX, 750)
+  }
+
+  // console.log(window.setTimeout(getXValues, 750))
 
   // update bar labels once they already exist but the window size changes
   barLabels
