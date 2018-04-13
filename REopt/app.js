@@ -167,8 +167,10 @@ const makeChart = () => {
   .attr('class', 'bar')
   .attr('x', 2)
   .attr('y', d => y(d.month))
-  .attr('width', d => x(d.solRad))
   .attr('height', y.bandwidth())
+  .transition()
+  .duration(750)
+  .attr('width', d => x(d.solRad))
 
   bars
   .attr('x', 2)
@@ -189,11 +191,18 @@ const makeChart = () => {
   .enter()
   .append('text')
   .attr('class', 'barLabel')
-  .attr('x', d => x(d.solRad))
   .attr('y', d => y(d.month))
-  .attr('dy', '1.2em')
+  .attr('dy', '1.4em')
   .attr('dx', '-2.5em')
   .text(d => +d.solRad.toFixed(3))
+  .transition()
+  .duration(750)
+  .attr('x', d => x(d.solRad))
+
+  const currentX = () => console.log(d3.selectAll('.barLabel')._groups[0][0].attributes[4])
+  window.setTimeout(currentX, 751)
+  // let currentX = d3.selectAll('.barLabel')._groups[0][0].attributes[4]
+  // console.log(currentX)
 
   // update bar labels once they already exist but the window size changes
   barLabels
