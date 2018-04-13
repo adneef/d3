@@ -118,7 +118,7 @@ const getData = async () => {
 // create the function that will make our barchart (es6)
 const makeChart = () => {
 
-
+  // get the size of the current window, and set the width and height based on that
   const bounds = svg.node().getBoundingClientRect(),
   width = bounds.width - margin.right - margin.left,
   height = bounds.height - margin.top - margin.bottom
@@ -197,19 +197,13 @@ const makeChart = () => {
   .text(d => +d.solRad.toFixed(3))
   .transition()
   .duration(750)
-  .attr('x', d => {
-    // change the x-value of the label depending on the size of the bar
-    if(x(d.solRad) < 42) return x(d.solRad) + 46
-    return x(d.solRad)
-  })
+  // change the x-value of the label depending on the width of the bar
+  .attr('x', d => x(d.solRad) < 42 ? x(d.solRad) + 46 : x(d.solRad))
 
   // update bar labels on window resize
   barLabels
-  .attr('x', d => {
-    // change the x-value of the label depending on the size of the bar
-    if(x(d.solRad) < 42) return x(d.solRad) + 46
-    return x(d.solRad)
-  })
+  // change the x-value of the label depending on the width of the bar
+  .attr('x', d => x(d.solRad) < 42 ? x(d.solRad) + 46 : x(d.solRad))
   .attr('y', d => y(d.month))
   .attr('dy', y.bandwidth()/1.7)
   .attr('dx', '-2.5em')
