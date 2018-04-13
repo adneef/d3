@@ -1,6 +1,7 @@
 svg {
   background: linear-gradient(to right, white, rgb(0, 153, 251) 15%);
   position: absolute;
+  /* padding: 1%; */
 }
 
 .corona {
