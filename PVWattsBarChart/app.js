@@ -7,7 +7,7 @@ const margin = {top: 20, right: 20, bottom: 50, left: 150},
 x = d3.scaleLinear(),
 y = d3.scaleBand().padding(0.1)
 
-// create global variables to store our data and location
+// create global variables to store our data and location - it's gross, I know
 let theData
 let where
 
@@ -192,12 +192,13 @@ const makeChart = () => {
   .append('text')
   .attr('class', 'barLabel')
   .attr('y', d => y(d.month))
-  .attr('dy', '1.4em')
+  .attr('dy', y.bandwidth()/1.7)
   .attr('dx', '-2.5em')
   .text(d => +d.solRad.toFixed(3))
   .transition()
   .duration(750)
   .attr('x', d => {
+    // change the x-value of the label depending on the size of the bar
     if(x(d.solRad) < 42) return x(d.solRad) + 46
     return x(d.solRad)
   })
@@ -205,11 +206,12 @@ const makeChart = () => {
   // update bar labels on window resize
   barLabels
   .attr('x', d => {
+    // change the x-value of the label depending on the size of the bar
     if(x(d.solRad) < 42) return x(d.solRad) + 46
     return x(d.solRad)
   })
   .attr('y', d => y(d.month))
-  .attr('dy', '1.2em')
+  .attr('dy', y.bandwidth()/1.7)
   .attr('dx', '-2.5em')
   .text(d => +d.solRad.toFixed(3))
 
