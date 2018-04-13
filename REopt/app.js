@@ -184,7 +184,7 @@ const makeChart = () => {
   // remove extra bars on window resize
   barLabels.exit().remove()
 
-  // add bar
+  // add bar labels to display the value of each bar
   barLabels
   .enter()
   .append('text')
@@ -195,6 +195,7 @@ const makeChart = () => {
   .attr('dx', '-2.5em')
   .text(d => +d.solRad.toFixed(3))
 
+  // update bar labels once they already exist but the window size changes
   barLabels
   .attr('x', d => x(d.solRad))
   .attr('y', d => y(d.month))
@@ -202,7 +203,7 @@ const makeChart = () => {
   .attr('dx', '-2.5em')
   .text(d => +d.solRad.toFixed(3))
 
-  // add a sun to the left side of our svg, inner and outer components
+  // add a sun to the left side of our svg, inner 'core' and outer 'corona' components
   svg
   .select('.corona')
   .data(theData)
@@ -230,7 +231,7 @@ const makeChart = () => {
   .text(`Monthly and Annual Solar Radiation Values Near ${where}`)
 }
 
-// call the function to create our chart
+// create and call the function to make our chart
 const assemble = async () => {
   if(!theData) await getData()
   d3.select(window).on('resize', makeChart)
