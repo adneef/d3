@@ -8,13 +8,6 @@ const API_KEY = process.env.API_KEY
 
 const app = express()
 
-// app.use((req, res, next) => {
-//   res.header("Content-Security-Policy",
-//   "default-src 'none'; connect-src 'self' https://d3js.org/d3.v5.min.js; style-src 'self'; script-src 'self' https://d3js.org/d3.v5.min.js; img-src 'self' data:;")
-//   res.header()
-//   return next()
-// })
-
 app.use(express.static('public'))
 
 app.get('/solar', async (req, res) => {
