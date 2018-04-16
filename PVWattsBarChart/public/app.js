@@ -79,12 +79,31 @@ g.append('text').attr('class', 'y-title label')
 g.append('ellipse').attr('class', 'core')
 g.append('ellipse').attr('class', 'corona')
 
+ // Create a chart legend to explain better what is being looked at
+const legend = g
+const legendBox = legend.append('rect').attr('class', 'chartLegendBox')
+const legendItems = legend.append('g').attr('class', 'legend items')
+
+legendItems
+.append('text')
+.attr('class', 'line1 line')
+.attr('dy', '1em')
+.attr('text-anchor', 'start')
+.text('Built with D3.js V5 using sample data')
+
+legendItems
+.append('text')
+.attr('class', 'line2 line')
+.attr('dy', '2em')
+.attr('text-anchor', 'start')
+.text("from NREL's PV Watts V5 API")
+
 // get our data and organize it
 const getData = async () => {
 
   // actually grab our data
-  const result = await d3.json('http://localhost:3000/solar')
-  // const result = await d3.json('./PVWattsData.json')
+  // const result = await d3.json('http://localhost:3000/solar')
+  const result = await d3.json('./PVWattsData.json')
 
   // grab city and state out of our data and process it to be the format we want
   let city = result.station_info.city,
@@ -236,6 +255,18 @@ const makeChart = () => {
   .attr('y', margin.top)
   .attr('text-anchor', 'middle')
   .text(`Monthly and Annual Solar Radiation Values Near ${where}`)
+
+  // make the legend move with resize
+  legendBox
+  .attr('height', 40)
+  .attr('width', 265)
+  .attr('x', width - 260)
+  .attr('y', 0)
+
+  legendItems
+  .selectAll('.line')
+  .attr('x', width - 250)
+  .attr('y', 0)
 }
 
 // create and call the function to make our chart

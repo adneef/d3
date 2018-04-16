@@ -1,4 +1,4 @@
-# Data Visualizations Using Sample Data from NREL's PVWatts V5 API
+# Data Visualization Using Sample Data from NREL's PVWatts V5 API
 
 ### A Brief Explanation
 
