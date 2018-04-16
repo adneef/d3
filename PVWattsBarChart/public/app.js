@@ -83,6 +83,7 @@ g.append('ellipse').attr('class', 'corona')
 const getData = async () => {
 
   // actually grab our data
+  // const result = await d3.json('http://localhost:3000/solar')
   const result = await d3.json('./PVWattsData.json')
 
   // grab city and state out of our data and process it to be the format we want
