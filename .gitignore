@@ -1,2 +1,2 @@
-./PVWattsBarChart/.env
+*.env
 .git
