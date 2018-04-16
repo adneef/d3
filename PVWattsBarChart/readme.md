@@ -10,7 +10,8 @@ Everything is responsive, to the place that very small screens will smash everyt
 
 ## Authors
 
-* **[Adam Neef](adneef@gmail.com)**
+* **Adam Neef**
+adneef@gmail.com
 
 ## Acknowledgments
 
